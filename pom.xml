@@ -15,17 +15,59 @@
 	<description>Ads board project</description>
 	<properties>
 		<java.version>11</java.version>
+		<openapi.generator.maven.plugin.version>6.0.1</openapi.generator.maven.plugin.version>
+		<jackson.databind.nullable.version>0.2.2</jackson.databind.nullable.version>
+		<springdoc-openapi-ui.version>1.6.6</springdoc-openapi-ui.version>
 	</properties>
+
 	<dependencies>
+		<!-- starters -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter</artifactId>
 		</dependency>
-
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-validation</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
+		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
+		</dependency>
+
+		<!-- security -->
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+
+		<!-- openapi -->
+		<dependency>
+			<groupId>org.springdoc</groupId>
+			<artifactId>springdoc-openapi-ui</artifactId>
+			<version>${springdoc-openapi-ui.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.openapitools</groupId>
+			<artifactId>jackson-databind-nullable</artifactId>
+			<version>${jackson.databind.nullable.version}</version>
+		</dependency>
+
+		<!-- general -->
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<optional>true</optional>
 		</dependency>
 	</dependencies>
 
@@ -34,6 +76,35 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.openapitools</groupId>
+				<artifactId>openapi-generator-maven-plugin</artifactId>
+				<version>${openapi.generator.maven.plugin.version}</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>generate</goal>
+						</goals>
+						<configuration>
+							<inputSpec>
+								${project.basedir}/src/main/resources/api/openapi_updated.yaml
+							</inputSpec>
+							<generatorName>spring</generatorName>
+							<library>spring-boot</library>
+							<output>${project.build.directory}/generated-sources</output>
+							<apiPackage>ru.egorbacheva.ads.controller</apiPackage>
+							<modelPackage>ru.egorbacheva.ads.dto</modelPackage>
+							<configOptions>
+								<delegatePattern>true</delegatePattern>
+								<useTags>false</useTags>
+								<interfaceOnly>true</interfaceOnly>
+								<useBeanValidation>true</useBeanValidation>
+								<performBeanValidation>true</performBeanValidation>
+							</configOptions>
+						</configuration>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>
